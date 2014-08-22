@@ -1,13 +1,17 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    httparty (0.13.1)
-      json (~> 1.8)
-      multi_xml (>= 0.5.2)
+    aggregate (0.2.2)
+    faraday (0.8.9)
+      multipart-post (~> 1.2.0)
     json (1.8.1)
     kgio (2.9.2)
-    multi_xml (0.5.5)
-    newrelic_rpm (3.9.2.239)
+    librato-metrics (1.4.0)
+      aggregate (~> 0.2.2)
+      faraday (~> 0.7)
+      multi_json
+    multi_json (1.10.1)
+    multipart-post (1.2.0)
     pg (0.17.1)
     rack (1.5.2)
     rack-protection (1.5.3)
@@ -27,9 +31,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  httparty
   json
-  newrelic_rpm
+  librato-metrics
   pg
   sinatra
   unicorn
