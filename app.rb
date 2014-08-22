@@ -19,8 +19,8 @@ module SendgridTracker
     end
 
     post '/track' do
-      logger.info "RECEIVED POST: #{params.inspect}"
-      params.inspect
+      logger.info "RECEIVED: #{request.body.read}"
+      request.body.read.inspect
     end
 
     get '/' do
