@@ -19,10 +19,13 @@ module SendgridTracker
     end
 
     post '/track' do
-      puts params.inspect
+      logger.info "RECEIVED POST: #{params.inspect}"
+      params.inspect
+    end
 
-      content_type 'application/json'
-      halt(200, params.inspect)
+    get '/' do
+      status 200
+      "ok"
     end
 
   end
