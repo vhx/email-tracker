@@ -27,10 +27,10 @@ module SendgridTracker
         case sendgrid_report['event']
         when 'delivered'
           logger.info "Logging a delivery at #{sendgrid_report['timestamp']}"
-          queue.add 'Sendgrid.Deliveries' => { source: 'Sendgrid', type: 'counter', measure_time: sendgrid_report['timestamp'], value: 1 }
+          queue.add 'Sendgrid.Deliveries' => { source: 'Sendgrid', measure_time: sendgrid_report['timestamp'], value: 1 }
         when 'bounce'
           logger.info "Logging a bounce at #{sendgrid_report['timestamp']}"
-          queue.add 'Sendgrid.Bounces' => { source: 'Sendgrid', type: 'counter', measure_time: sendgrid_report['timestamp'], value: 1 }
+          queue.add 'Sendgrid.Bounces' => { source: 'Sendgrid', measure_time: sendgrid_report['timestamp'], value: 1 }
         end
       end
 
