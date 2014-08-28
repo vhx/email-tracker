@@ -36,6 +36,11 @@ module SendgridTracker
       request.body.read.inspect
     end
 
+    get '/track' do
+      status 200
+      "ok"
+    end
+
     get '/' do
       status 200
       "ok"
