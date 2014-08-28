@@ -19,47 +19,34 @@ module SendgridTracker
     end
 
     post '/track_sendgrid' do
-      # logger.info "RECEIVED: #{request.body.read}"
+      queue = Librato::Metrics::Queue.new
       sendgrid_reports = JSON.parse(request.body.read)
+      sendgrid_reports.each do |sendgrid_report|
+       queue.add "Sendgrid.#{event_name}" => { source: 'Sendgrid', measure_time: sendgrid_report['timestamp'], value: 1 }
+      end
 
-      # queue = Librato::Metrics::Queue.new
+      Librato::Metrics.authenticate ENV['LIBRATO_EMAIL'], ENV['LIBRATO_API_KEY']
+      queue.submit
 
-      # sendgrid_reports.each do |sendgrid_report|
-      #   event_name = sendgrid_report['event'].gsub(/\s+/, "_").downcase
-      #   queue.add "Sendgrid.#{event_name}" => { source: 'Sendgrid', measure_time: sendgrid_report['timestamp'], value: 1 }
-      # end
-
-      # Librato::Metrics.authenticate ENV['LIBRATO_EMAIL'], ENV['LIBRATO_API_KEY']
-      # queue.submit
-
-      status 200
       request.body.read.inspect
     end
 
     post '/track_mandrill' do
-      logger.info "RECEIVED: #{request.body.read}"
-
       queue = Librato::Metrics::Queue.new
 
-      trackable_params = params.dup
-      trackable_params.delete('splat')
-      trackable_params.delete('captures')
+      mandrill_events = JSON.parse(params['mandrill_events'])
+      mandrill_events.each do |event|
+        queue.add "Mandrill.#{event['event']}" => { source: 'Mandrill', measure_time: event['ts'], value: 1 } if event['event']
+      end
 
-      # trackable_params.each do |sendgrid_report|
-      #   event_name = sendgrid_report['event'].gsub(/\s+/, "_").downcase
-      #   queue.add "Sendgrid.#{event_name}" => { source: 'Sendgrid', measure_time: sendgrid_report['timestamp'], value: 1 }
-      # end
+      Librato::Metrics.authenticate ENV['LIBRATO_EMAIL'], ENV['LIBRATO_API_KEY']
+      queue.submit
 
-      # Librato::Metrics.authenticate ENV['LIBRATO_EMAIL'], ENV['LIBRATO_API_KEY']
-      # queue.submit
-
-      status 200
-      puts trackable_params.to_yaml
-      trackable_params.to_yaml
+      "ok"
     end
 
+
     get '/track_mandrill' do
-      status 200
       "ok"
     end
 
