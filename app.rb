@@ -21,16 +21,18 @@ module SendgridTracker
     post '/track' do
       # logger.info "RECEIVED: #{request.body.read}"
       sendgrid_reports = JSON.parse(request.body.read)
-      queue = Librato::Metrics::Queue.new
 
-      sendgrid_reports.each do |sendgrid_report|
-        event_name = sendgrid_report['event'].gsub(/\s+/, "_").downcase
-        queue.add "Sendgrid.#{event_name}" => { source: 'Sendgrid', measure_time: sendgrid_report['timestamp'], value: 1 }
-      end
+      # queue = Librato::Metrics::Queue.new
 
-      Librato::Metrics.authenticate ENV['LIBRATO_EMAIL'], ENV['LIBRATO_API_KEY']
-      queue.submit
+      # sendgrid_reports.each do |sendgrid_report|
+      #   event_name = sendgrid_report['event'].gsub(/\s+/, "_").downcase
+      #   queue.add "Sendgrid.#{event_name}" => { source: 'Sendgrid', measure_time: sendgrid_report['timestamp'], value: 1 }
+      # end
 
+      # Librato::Metrics.authenticate ENV['LIBRATO_EMAIL'], ENV['LIBRATO_API_KEY']
+      # queue.submit
+
+      status 200
       request.body.read.inspect
     end
 
